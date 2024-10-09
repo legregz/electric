@@ -13,10 +13,26 @@ class Matrix:
     def show(self):
         for y in range(len(self.matrix)):
             for x in range(len(self.matrix[y])):
-                if self.matrix[y][x] == 2:
-                    pygame.draw.rect(screen, (255, 255, 255), (x * 50, y * 50, 50, 50))
-                if self.matrix[y][x] >= 1:
-                    pygame.draw.rect(screen, (255, 0, 0), (x * 50, y * 50, 20, 20))
+                if self.matrix[y][x] == 1:
+                    if x % 2 == 0 and y % 2 == 0:
+                        if x > 0:
+                            if self.matrix[y][x - 1]:
+                                pygame.draw.rect(screen, (255, 255, 255), (x * 50, y * 50 + 15, 15, 20))
+
+                        if x < len(self.matrix[y]) - 1:
+                            if self.matrix[y][x + 1]:
+                                pygame.draw.rect(screen, (255, 255, 255), (x * 50 + 35, y * 50 + 15, 15, 20))
+
+                        if y > 0:
+                            if self.matrix[y - 1][x]:
+                                pygame.draw.rect(screen, (255, 255, 255), (x * 50 + 15, y * 50, 20, 15))
+
+                        if y < len(self.matrix) - 1:
+                            if self.matrix[y + 1][x]:
+                                pygame.draw.rect(screen, (255, 255, 255), (x * 50 + 15, y * 50 + 35, 20, 15))
+                        pygame.draw.rect(screen, (255, 255, 255), (x * 50 + 15, y * 50 + 15, 20, 20))
+                    else:
+                        pygame.draw.rect(screen, (255, 0, 0), (x * 50 + 15, y * 50 + 15, 20, 20))
 
     def get(self, x, y):
         return self.matrix[y][x]
@@ -26,25 +42,25 @@ class Matrix:
 
     def export(self):
         string = ""
-        for y in range(len(self.matrix)):
-            for x in range(len(self.matrix[y])):
-                if self.matrix[y][x] == 2:
+        for y in range(0, len(self.matrix), 2):
+            for x in range(0, len(self.matrix[y]), 2):
+                if self.matrix[y][x] == 1:
                     value = 0
 
                     if x > 0:
-                        if self.matrix[y][x - 1] > 0:
+                        if self.matrix[y][x - 1]:
                             value += 2
 
                     if x < len(self.matrix[y]) - 1:
-                        if self.matrix[y][x + 1] > 0:
+                        if self.matrix[y][x + 1]:
                             value += 1
 
                     if y > 0:
-                        if self.matrix[y - 1][x] > 0:
+                        if self.matrix[y - 1][x]:
                             value += 8
 
                     if y < len(self.matrix) - 1:
-                        if self.matrix[y + 1][x] > 0:
+                        if self.matrix[y + 1][x]:
                             value += 4
 
                     if value == 0:
@@ -103,15 +119,6 @@ while run:
 
         if event.type == pygame.MOUSEBUTTONDOWN:
             if pygame.mouse.get_pressed()[0]:
-                x, y = pygame.mouse.get_pos()
-                x //= 50
-                y //= 50
-                if matrix.get(x, y) == 2:
-                    matrix.set(x, y, 0)
-                else:
-                    matrix.set(x, y, 2)
-
-            if pygame.mouse.get_pressed()[2]:
                 x, y = pygame.mouse.get_pos()
                 x //= 50
                 y //= 50
